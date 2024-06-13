@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
+    "start": "node index.mjs",
     "test": "mocha test.mjs"
   },
   "author": "",

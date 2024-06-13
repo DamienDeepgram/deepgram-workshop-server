@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>WebSocket Microphone Streaming</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
+</head>
+
+<body>
+  <canvas id="blobCanvas" width="700" height="700" style="display: none;"></canvas>
+  <div id="startContainer">
+    <select id="voice">
+      <option value="aura-asteria-en">Asteria</option>
+      <option value="aura-athena-en">Athena</option>
+    </select>
+    <select id="model">
+      <option value="anthropic+claude-3-haiku-20240307">Anthropic: Claude 3 Haiku</option>
+      <option value="deepgram+llama-3-8b-instruct">Deepgram: Llama 3 8b</option>
+      <option value="groq+llama3-8b-8192">Groq: Llama 3 8b</option>
+      <option value="groq+llama3-70b-8192">Groq: Llama 3 70b</option>
+      <option value="groq+mixtral-8x7b-32768">Groq: Mixtral 8x7b</option>
+      <option value="open_ai+gpt-4o">OpenAI: GPT 4 Omni</option>
+      <option value="open_ai+gpt-3.5-turbo">OpenAI: GPT 3.5 Turbo</option>
+    </select>
+    <button id="startConversationBtn">Start Conversation</button>
+  </div>
+  <div id="instructionsContainer" style="display: none;">
+    <textarea
+      id="instructionsInput"
+      placeholder="Enter instructions here..."
+    ></textarea>
+    <button id="updateInstructionsBtn">Update Instructions</button>
+  </div>
+  <div id="buttonContainer" style="display: none;">
+    <div class="circle-button" id="aura-asteria-en">
+      <div class="button-title">Asteria</div>
+    </div>
+    <div class="circle-button" id="aura-athena-en">
+      <div class="button-title">Athena</div>
+    </div>
+  </div>
+</body>
+</html>
