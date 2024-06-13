@@ -1,0 +1,24 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "test": "mocha test.mjs"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "chai": "^4.3.6",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mocha": "^10.4.0",
+    "supertest": "^7.0.0",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "chai-http": "^4.3.0"
+  }
+}
