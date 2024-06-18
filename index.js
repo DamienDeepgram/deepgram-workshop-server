@@ -1,6 +1,6 @@
-import express from 'express';
-import { v4 as uuidv4 } from 'uuid';
-import cors from 'cors';
+const { v4: uuidv4 } = require('uuid');
+const express = require('express');
+const cors = require('cors');
 
 const app = express();
 const port = 3000;
@@ -9,48 +9,55 @@ app.use(cors());
 app.use(express.json());
 
 let appState = {
-  calls: new Map(),
+  calls: {},
   menu: {
-    items: new Map(),
+    items: {},
   },
 };
 
+app.get('/', (req, res) => {
+  console.log("root");
+  console.log("root");
+  res.json({success: 'OK'});
+});
+
 app.get('/menu', (req, res) => {
   console.log("getting info for the menu");
-  console.log(appState.menu);
-  res.json(Object.fromEntries(appState.menu.items));
+  console.log('XXX Menu: ',appState.menu);
+  res.json(Object.values(appState.menu.items));
 });
 
 app.post('/menu/items', (req, res) => {
   console.log("adding item to menu");
   console.log(req.body);
   const item = req.body;
-  appState.menu.items.set(item.name, item);
+  appState.menu.items[item.name] = item;
   res.send("successfully added item to menu");
 });
 
 app.delete('/menu/items', (req, res) => {
   console.log("clearing menu");
-  appState.menu.items.clear();
+  appState.menu.items = [];
   res.send("successfully cleared the menu");
 });
 
 app.post('/calls', (req, res) => {
   console.log("creating a call");
   const id = uuidv4();
-  appState.calls.set(id, { 
+  appState.calls[id] = { 
     id, 
     order: {
       items: [],
     }
-  });
+  };
   console.log(id);
   res.send(id);
 });
 
 app.get('/calls/:id', (req, res) => {
-  console.log("getting info for a call");
-  const call = appState.calls.get(req.params.id);
+  const id = req.params.id;
+  console.log("getting info for a call: ", id);
+  const call = appState.calls[id]
   if (call) {
     console.log(call);
     res.json(call);
@@ -60,8 +67,9 @@ app.get('/calls/:id', (req, res) => {
 });
 
 app.get('/calls/:id/order', (req, res) => {
-  console.log("getting info for a call order: ", req.params.id);
-  const call = appState.calls.get(req.params.id);
+  const id = req.params.id;
+  console.log("getting info for a call order: ", id);
+  const call = appState.calls[id];
   if (call) {
     console.log(call.order);
     res.json(call.order);
@@ -71,19 +79,21 @@ app.get('/calls/:id/order', (req, res) => {
 });
 
 app.post('/calls/:id/order/items', (req, res) => {
-  console.log("updating order (adding item)");
-  console.log(req.body);
   const id = req.params.id;
   const itemRequest = req.body.item;
+  console.log("updating order (adding item) to call ", id, itemRequest);
+  console.log(req.body);
+  console.log('state:', appState.calls)
 
-  if (appState.calls.has(id)) {
-    const call = appState.calls.get(id);
+  if (appState.calls[id]) {
+    const call = appState.calls[id];
     const menu = appState.menu;
 
-    if (!menu.items.has(itemRequest)) {
+    if (!menu.items[itemRequest]) {
+      console.log('Item not on menu:', menu.items);
       res.send("We were unable to submit this order as there were items requested that were not on the menu.");
     } else {
-      const newItem = menu.items.get(itemRequest);
+      const newItem = menu.items[itemRequest];
 
       if (call.order) {
         call.order.items.push(newItem);
@@ -93,6 +103,7 @@ app.post('/calls/:id/order/items', (req, res) => {
         };
       }
 
+      console.log('Item added to order');
       res.send("We were able to successfully add the item to the order!");
     }
   } else {
@@ -106,8 +117,8 @@ app.delete('/calls/:id/order/items', (req, res) => {
   const id = req.params.id;
   const itemRequest = req.body.item;
 
-  if (appState.calls.has(id)) {
-    const call = appState.calls.get(id);
+  if (appState.calls[id]) {
+    const call = appState.calls[id];
 
     if (call.order) {
       const index = call.order.items.findIndex(item => item.name === itemRequest);
@@ -129,8 +140,8 @@ app.delete('/calls/:id/order', (req, res) => {
   console.log("clearing a call order");
   const id = req.params.id;
 
-  if (appState.calls.has(id)) {
-    const call = appState.calls.get(id);
+  if (appState.calls[id]) {
+    const call = appState.calls[id];
     call.order = null;
     res.send("successfully cleared the call's order");
   } else {
@@ -141,5 +152,3 @@ app.delete('/calls/:id/order', (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on http://0.0.0.0:${port}`);
 });
-
-export { app as server };
