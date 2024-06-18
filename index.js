@@ -149,6 +149,7 @@ app.delete('/calls/:id/order', (req, res) => {
   }
 });
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server is running on http://0.0.0.0:${port}`);
 });
+module.exports = { app, server };
