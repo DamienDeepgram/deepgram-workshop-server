@@ -1,9 +1,9 @@
-import chai from 'chai';
-import chaiHttp from 'chai-http';
+const chai = require('chai');
+const chaiHttp = require('chai-http');
 const { should } = chai;
 
-import { server } from './index.mjs'; // Ensure this path is correct
-import { v4 as uuidv4 } from 'uuid';
+const { server } = require('./index.js');
+const { v4: uuidv4 } = require('uuid');
 
 should();
 chai.use(chaiHttp);
