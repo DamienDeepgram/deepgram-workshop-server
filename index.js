@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 
 app.get('/menu', (req, res) => {
   console.log("getting info for the menu");
-  console.log('XXX Menu: ',appState.menu);
+  console.log('Menu: ',appState.menu);
   res.json(Object.values(appState.menu.items));
 });
 
